@@ -1,5 +1,8 @@
 package com.example.advanced_webapp.Tables;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -12,6 +15,7 @@ import java.util.Set;
 
 @Entity
 @Embeddable
+@Getter @Setter @NoArgsConstructor
 public class Tag implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -36,69 +40,5 @@ public class Tag implements Serializable {
 
     @ManyToMany(mappedBy = "tags")
     private Set<Task> tasks = new HashSet<>();
-
-    public Tag(String name) {
-        this.name = name;
-    }
-
-    public Tag() {
-
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(String tagId) {
-        tagId = tagId;
-    }
-
-    public User getUsers() {
-        return user;
-    }
-
-    public void setUsers(User user) {
-        this.user = user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
 
 }

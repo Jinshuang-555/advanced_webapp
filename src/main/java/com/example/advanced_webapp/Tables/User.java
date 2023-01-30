@@ -1,13 +1,22 @@
 package com.example.advanced_webapp.Tables;
 
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 
 @Entity
-public class User {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
@@ -24,100 +33,50 @@ public class User {
     private String email;
     @NotBlank
     private String password;
-    private boolean verified;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public User() {
-    }
     @OneToMany(mappedBy = "user")
     private java.util.List<Tag> tagList;
 
     @OneToMany(mappedBy = "user")
     private java.util.List<List> listList;
 
-    public String getUserId() {
-        return userId;
+    // return list of roles
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return java.util.List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    public boolean isVerified() {
-        return verified;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setVerified(boolean verified) {
-        this.verified = verified;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public java.util.List<Tag> getTagsList() {
-        return tagList;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setTagsList(java.util.List<Tag> tagList) {
-        this.tagList = tagList;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    public java.util.List<List> getListsList() {
-        return listList;
-    }
 
-    public void setListsList(java.util.List<List> listList) {
-        this.listList = listList;
-    }
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public java.util.List<Tag> getTagList() {
-        return tagList;
-    }
-
-    public void setTagList(java.util.List<Tag> tagList) {
-        this.tagList = tagList;
-    }
-
-    public java.util.List<List> getListList() {
-        return listList;
-    }
-
-    public void setListList(java.util.List<List> listList) {
-        this.listList = listList;
-    }
 }

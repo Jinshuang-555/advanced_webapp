@@ -1,5 +1,8 @@
 package com.example.advanced_webapp.Tables;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -8,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Embeddable
+@Getter @Setter @NoArgsConstructor
 public class Remainder {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -27,61 +31,10 @@ public class Remainder {
 
     private LocalDateTime updatedAt;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     // update each time when entity is changed
     @PrePersist
     @PreUpdate
     public void setUpdatedAt() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    public Remainder() {
-    }
-
-    public String getRemainderId() {
-        return remainderId;
-    }
-
-    public void setRemainderId(String remainderId) {
-        this.remainderId = remainderId;
-    }
-
-    public Task getTask() {
-        return task;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getSentTime() {
-        return sentTime;
-    }
-
-    public void setSentTime(LocalDateTime sentTime) {
-        this.sentTime = sentTime;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

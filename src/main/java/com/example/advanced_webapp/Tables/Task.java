@@ -1,12 +1,15 @@
 package com.example.advanced_webapp.Tables;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity @Getter @Setter @NoArgsConstructor
 public class Task {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
@@ -32,87 +35,6 @@ public class Task {
             inverseJoinColumns = @JoinColumn(name = "tagId"))
     private Set<Tag> tags = new HashSet<>();
 
-    public Task() {
-    }
 
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
-    }
-
-    public List getLists() {
-        return list;
-    }
-
-    public void setLists(List list) {
-        this.list = list;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getTask() {
-        return Task;
-    }
-
-    public void setTask(String task) {
-        Task = task;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public java.util.List<Remainder> getRemaindersList() {
-        return remainderList;
-    }
-
-    public void setRemaindersList(java.util.List<Remainder> remainderList) {
-        this.remainderList = remainderList;
-    }
-
-    public List getList() {
-        return list;
-    }
-
-    public void setList(List list) {
-        this.list = list;
-    }
-
-    public java.util.List<Remainder> getRemainderList() {
-        return remainderList;
-    }
-
-    public void setRemainderList(java.util.List<Remainder> remainderList) {
-        this.remainderList = remainderList;
-    }
-
-    public Set<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
 
 }
