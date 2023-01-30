@@ -20,6 +20,13 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
 
     // responsible for configuring all http security of our application
+
+    // because JWT tokens are passed in the header of the request, rather than in a cookie.
+    // Since JWT tokens are stored in the header,
+    // they are not susceptible to being intercepted by a malicious website.
+    // Thus, CSRF protection is not needed. - disable csrf
+
+    // session state is not stored, and each request needs to be authenticated
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity

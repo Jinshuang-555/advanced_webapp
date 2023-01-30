@@ -38,7 +38,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60* 24))
+                .setExpiration(new Date(System.currentTimeMillis()+ 1000 * 60* 10))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -69,5 +69,15 @@ public class JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRETE_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String expireToken(String token) {
+        Claims claims = extractAllClaims(token);
+        claims.setExpiration(new Date(0));
+        String expiredToken = Jwts.builder()
+                .setClaims(claims)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+        return expiredToken;
     }
 }
