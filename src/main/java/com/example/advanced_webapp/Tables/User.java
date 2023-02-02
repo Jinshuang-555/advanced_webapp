@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private boolean verified;
 
     @OneToMany(mappedBy = "user")
     private java.util.List<Tag> tagList;
