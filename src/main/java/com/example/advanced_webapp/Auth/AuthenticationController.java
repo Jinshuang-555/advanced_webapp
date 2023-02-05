@@ -16,7 +16,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) throws IOException, IOException {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) throws IOException {
         return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
