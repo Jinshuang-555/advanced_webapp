@@ -52,7 +52,6 @@ public class AuthenticationService {
 
         String link = "http://localhost:8080/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
         String message = "email="+registerRequest.getEmail() + ",link=" + link;
-        System.out.println(message);
         kafkaTemplate.send("registration", message);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse

@@ -17,6 +17,7 @@ public class KafkaListeners {
 
     @KafkaListener(topics = "registration",groupId = "groupId")
     void listener(String data) throws IOException {
+        System.out.println(data);
         String[] dataArray = data.split(",");
         String email = dataArray[0].substring(6);
         String link = dataArray[1].substring(5);
