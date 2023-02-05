@@ -10,7 +10,7 @@ public class EmailService {
 
     public void send(String email, String link) throws IOException {
         Email from = new Email("niu.jins@northeastern.edu");
-        String subject = "Sending with SendGrid is Fun";
+        String subject = "Email to verify your account";
         Email to = new Email(email);
         Content content = new Content("text/plain", "Please verify your account "+link);
         Mail mail = new Mail(from, subject, to, content);
