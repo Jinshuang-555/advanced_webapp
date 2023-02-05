@@ -1,6 +1,7 @@
 package com.example.advanced_webapp.Auth;
 
 import com.example.advanced_webapp.Auth.VerificationToken.Token;
+import com.example.advanced_webapp.Auth.VerificationToken.TokenRepository;
 import com.example.advanced_webapp.Config.JwtService;
 import com.example.advanced_webapp.Repositories.UserRepository;
 import com.example.advanced_webapp.Tables.Role;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -44,6 +47,9 @@ public class AuthenticationService {
                 LocalDateTime.now().plusMinutes(15),
                 user
         );
+
+        tokenRepository.save(tokenObject);
+
         String link = "http://localhost:8080/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
         String message = "email="+registerRequest.getEmail() + ",link=" + link;
         System.out.println(message);
@@ -71,8 +77,25 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Transactional
     public void verify(String email, String token) {
-        User user = userRepository.findUserByEmail(email);
-        user.setVerified(true);
+
+        Token confirmationToken = tokenRepository
+                .findByToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+        tokenRepository.updateConfirmedAt(token,LocalDateTime.now());
+        tokenRepository.updateConfirmedAt(token, LocalDateTime.now());
+        userRepository.verifyUser(email);
     }
 }
