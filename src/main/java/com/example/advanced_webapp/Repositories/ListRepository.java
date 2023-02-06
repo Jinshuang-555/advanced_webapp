@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface ListRepository extends JpaRepository<List, Long> {
     void deleteByName(String name);
     Optional<List> findByName(String name);
-
+    List findListByName(String listName);
 }

@@ -1,15 +1,17 @@
 package com.example.advanced_webapp.Tables;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity @Getter @Setter @NoArgsConstructor
+@Entity @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Task {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
@@ -20,11 +22,11 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "listId")
     private List list;
-
     private String summary;
-    private String Task;
+    private String task;
+    private LocalDateTime dueDate;
     private int priority; // 1-high 2-medium 3-low
-    private int status; // 1-todo 2-completed 3- overdue
+    private int status; // 1-todo 2-completed 3-overdue
 
     @OneToMany(mappedBy = "task")
     java.util.List<Remainder> remainderList;
