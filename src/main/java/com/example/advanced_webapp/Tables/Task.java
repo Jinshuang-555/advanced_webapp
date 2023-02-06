@@ -35,6 +35,4 @@ public class Task {
             inverseJoinColumns = @JoinColumn(name = "tagId"))
     private Set<Tag> tags = new HashSet<>();
 
-
-
 }
