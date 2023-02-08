@@ -3,6 +3,8 @@ package com.example.advanced_webapp.Auth;
 import com.example.advanced_webapp.Auth.VerificationToken.Token;
 import com.example.advanced_webapp.Auth.VerificationToken.TokenRepository;
 import com.example.advanced_webapp.Config.JwtService;
+import com.example.advanced_webapp.Kafka.KafkaProducer;
+import com.example.advanced_webapp.Kafka.Message;
 import com.example.advanced_webapp.Repositories.UserRepository;
 import com.example.advanced_webapp.Tables.Role;
 import com.example.advanced_webapp.Tables.User;
@@ -27,7 +29,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaProducer kafkaProducer;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) throws IOException {
         var user = User
@@ -51,15 +53,14 @@ public class AuthenticationService {
         tokenRepository.save(tokenObject);
 
         String link = "http://localhost:8080/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
-        String message = "email="+registerRequest.getEmail() + ",link=" + link;
-        kafkaTemplate.send("registration", message);
+        Message message = new Message(registerRequest.getEmail(), link);
+        kafkaProducer.sendMessage("registration", message);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
                 .build();
     }
-
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
