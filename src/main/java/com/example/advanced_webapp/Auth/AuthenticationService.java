@@ -4,12 +4,11 @@ import com.example.advanced_webapp.Auth.VerificationToken.Token;
 import com.example.advanced_webapp.Auth.VerificationToken.TokenRepository;
 import com.example.advanced_webapp.Config.JwtService;
 import com.example.advanced_webapp.Kafka.KafkaProducer;
-import com.example.advanced_webapp.Kafka.Message;
+import com.example.advanced_webapp.Kafka.Message.EmailMessage;
 import com.example.advanced_webapp.Repositories.UserRepository;
 import com.example.advanced_webapp.Tables.Role;
 import com.example.advanced_webapp.Tables.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,7 +52,7 @@ public class AuthenticationService {
         tokenRepository.save(tokenObject);
 
         String link = "http://localhost:8080/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
-        Message message = new Message(registerRequest.getEmail(), link);
+        EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
         kafkaProducer.sendMessage("registration", message);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse

@@ -1,6 +1,7 @@
 package com.example.advanced_webapp.Kafka;
 
 import com.example.advanced_webapp.Email.EmailService;
+import com.example.advanced_webapp.Kafka.Message.EmailMessage;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class KafkaListeners {
     }
 
     @KafkaListener(topics = "registration",groupId = "groupId")
-    void listener(Message message) throws IOException {
+    void listener(EmailMessage message) throws IOException {
         System.out.println(message.getEmail());
         System.out.println(message.getLink());
         emailService.send(message.getEmail(), message.getLink());

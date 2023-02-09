@@ -1,5 +1,6 @@
 package com.example.advanced_webapp.Controllers.Task;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
