@@ -6,6 +6,7 @@ import com.example.advanced_webapp.Tables.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,15 @@ public class UserController {
     }
     @DeleteMapping
     @Transactional
-    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) throws Exception {
         String token = request.getHeader("Authorization").substring(7);
         String userName = jwtService.extractUsername(token);
+        User user = userRepository.findByEmail(userName).orElseThrow();
+        if (user == null) {
+            return ResponseEntity.status(404).body("Please register first");
+        } else if (!user.isVerified()) {
+            return ResponseEntity.status(403).body("Please verify your account first");
+        }
         userRepository.deleteUsersByEmail(userName);
         return ResponseEntity.ok("deleted user " + userName);
     }

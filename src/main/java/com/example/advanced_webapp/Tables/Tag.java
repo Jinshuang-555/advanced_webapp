@@ -1,8 +1,6 @@
 package com.example.advanced_webapp.Tables;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,7 +13,10 @@ import java.util.Set;
 
 @Entity
 @Embeddable
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tag implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid")
