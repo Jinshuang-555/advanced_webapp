@@ -33,7 +33,7 @@ services:
     image: mysql:8
     environment:
       MYSQL_DATABASE: todo
-      MYSQL_ROOT_PASSWORD: Njs862459063!
+      MYSQL_ROOT_PASSWORD: password
     ports:
       - "3306:3306"
     networks:
