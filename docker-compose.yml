@@ -40,7 +40,7 @@ services:
       - my-network
 
   app:
-    build: .
+    image: my-app:1
     container_name: my-app
     restart: on-failure
     networks:

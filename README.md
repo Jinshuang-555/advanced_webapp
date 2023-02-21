@@ -14,3 +14,13 @@ to containerize application:
 docker-compose down
 docker-compose up --build
 
+docker rmi -f $(docker images -a -q)
+./mvnw package -DskipTests
+
+docker build -t my-app:1 .
+
+docker login
+docker tag my-app:1 jinshuangniu/advanced1cloud1computing:v1.0
+docker push jinshuangniu/advanced1cloud1computing:v1.0
+
+
