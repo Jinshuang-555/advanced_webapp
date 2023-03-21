@@ -1,5 +1,5 @@
 # Use an official OpenJDK runtime as a parent image
-FROM arm64v8/openjdk:17-ea-16-jdk
+FROM openjdk:17
 
 ENV DEBUG=true
 

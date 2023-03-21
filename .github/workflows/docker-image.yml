@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  login:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: check secretes
+      run: echo ${{ secrets.DOCKERHUB_USERNAME }}
+    - name: build artifact
+      run: ./mvnw package -DskipTests
+    - name: DockerHub Login
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build the Docker image
+      run: | 
+        TAG=$(date +%s | tr -d '\n' | tr -d '\r' | tr ':' '_')
+        docker build -t db:$TAG .
+        docker login
+        docker tag db:$TAG jinshuangniu/advanced1cloud1computing:app-$TAG
+        docker push jinshuangniu/advanced1cloud1computing:app-$TAG
