@@ -19,12 +19,10 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-    - name: build with maven
-      run: ./mvnw package -DskipTests
     - name: package
       run: |
         pwd
-        mvn clean install
+        mvn clean install -DskipTests
         pwd
         ls -al target
     - name: DockerHub Login
