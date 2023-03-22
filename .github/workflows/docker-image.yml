@@ -15,7 +15,7 @@ jobs:
     - name: check secretes
       run: echo ${{ secrets.DOCKERHUB_USERNAME }}
     - name: build with maven
-      run: mvn -B package --file pom.xml
+      run: ./mvnw package -DskipTests
     - name: package
       run: |
         pwd
