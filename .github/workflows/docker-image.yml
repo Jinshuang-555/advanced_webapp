@@ -13,14 +13,14 @@ jobs:
     steps:
     - name: check secretes
       run: echo ${{ secrets.DOCKERHUB_USERNAME }}
-      - name: build with maven
-        run: mvn -B package --file pom.xml
-      - name: package
-        run: |
-          pwd
-          mvn clean install
-          pwd
-          ls -al target
+    - name: build with maven
+      run: mvn -B package --file pom.xml
+    - name: package
+      run: |
+        pwd
+        mvn clean install
+        pwd
+        ls -al target
     - name: DockerHub Login
       uses: docker/login-action@v1
       with:
