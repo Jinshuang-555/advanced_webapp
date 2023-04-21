@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
     - name: edit application property
-      run: echo "spring.sendgrid.api.key=${{ secrets.SENDGRID_KEY }}" > src/main/resources/application.properties
+      run: echo "spring.sendgrid.api.key=${{ secrets.SENDGRID_KEY }}" >> src/main/resources/application.properties
     - name: package
       run: |
         pwd
