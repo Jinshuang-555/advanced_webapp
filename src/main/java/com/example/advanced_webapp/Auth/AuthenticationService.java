@@ -57,6 +57,7 @@ public class AuthenticationService {
         EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
 //        kafkaProducer.sendMessage("registration", message);
         emailService.send(message.getEmail(), message.getLink());
+        System.out.println("link: " + link);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()
