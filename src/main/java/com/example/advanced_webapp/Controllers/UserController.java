@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/v1/app/user")
 @RequiredArgsConstructor
 public class UserController {
     private final JwtService jwtService;

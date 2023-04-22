@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/v1/app/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
 

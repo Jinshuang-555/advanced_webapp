@@ -53,7 +53,7 @@ public class AuthenticationService {
 
         tokenRepository.save(tokenObject);
 
-        String link = "https://istio.k8s.csye6225jinshuang.me/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
+        String link = "https://istio.k8s.csye6225jinshuang.me/v1/app/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
         EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
 //        kafkaProducer.sendMessage("registration", message);
         emailService.send(message.getEmail(), message.getLink());

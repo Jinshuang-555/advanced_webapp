@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/tag")
+@RequestMapping("/v1/app/tag")
 @RequiredArgsConstructor
 public class TagController {
     private final JwtService jwtService;
