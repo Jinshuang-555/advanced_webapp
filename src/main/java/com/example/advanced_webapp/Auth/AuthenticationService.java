@@ -3,6 +3,7 @@ package com.example.advanced_webapp.Auth;
 import com.example.advanced_webapp.Auth.VerificationToken.Token;
 import com.example.advanced_webapp.Auth.VerificationToken.TokenRepository;
 import com.example.advanced_webapp.Config.JwtService;
+import com.example.advanced_webapp.Email.EmailService;
 import com.example.advanced_webapp.Kafka.KafkaProducer;
 import com.example.advanced_webapp.Kafka.Message.EmailMessage;
 import com.example.advanced_webapp.Repositories.UserRepository;
@@ -29,6 +30,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final KafkaProducer kafkaProducer;
+    private final EmailService emailService;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) throws IOException {
         var user = User
@@ -53,7 +55,8 @@ public class AuthenticationService {
 
         String link = "https://istio.k8s.csye6225jinshuang.me/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
         EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
-        kafkaProducer.sendMessage("registration", message);
+//        kafkaProducer.sendMessage("registration", message);
+        emailService.send(message.getEmail(), message.getLink());
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()
