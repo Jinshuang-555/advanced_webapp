@@ -1,13 +1,14 @@
 package com.example.advanced_webapp.Email;
 
 import com.sendgrid.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
 public class EmailService {
-    private String SENDGRID_API_KEY="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";
-
+    @Value("${spring.sendgrid.api.key}")
+    private String SENDGRID_API_KEY;
     public void send(String email, String link) throws IOException {
         Email from = new Email("niu.jins@northeastern.edu");
         String subject = "Email to verify your account";

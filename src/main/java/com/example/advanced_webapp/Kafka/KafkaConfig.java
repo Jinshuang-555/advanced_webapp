@@ -19,7 +19,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.producer}")
     private String boostrapServers;
     @Bean
     public ProducerFactory<String, EmailMessage> producerFactory() {

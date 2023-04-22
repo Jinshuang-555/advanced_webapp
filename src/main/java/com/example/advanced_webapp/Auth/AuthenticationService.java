@@ -51,7 +51,7 @@ public class AuthenticationService {
 
         tokenRepository.save(tokenObject);
 
-        String link = "http://localhost:8080/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
+        String link = "https://istio.k8s.csye6225jinshuang.me/api/v1/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
         EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
         kafkaProducer.sendMessage("registration", message);
         var jwtToken = jwtService.generateToken(user);

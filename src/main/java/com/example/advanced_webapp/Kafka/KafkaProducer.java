@@ -2,9 +2,6 @@ package com.example.advanced_webapp.Kafka;
 
 import com.example.advanced_webapp.Kafka.Message.EmailMessage;
 import com.example.advanced_webapp.Kafka.Message.TaskMessage;
-import com.example.advanced_webapp.Tables.Task;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -21,17 +18,17 @@ public class KafkaProducer {
         this.taskKafkaTemplate = taskKafkaTemplate;
     }
 
-    public void sendMessage(String topic, EmailMessage person) {
-        ListenableFuture<SendResult<String, EmailMessage>> future = kafkaTemplate.send(topic, person);
+    public void sendMessage(String topic, EmailMessage message) {
+        ListenableFuture<SendResult<String, EmailMessage>> future = kafkaTemplate.send(topic, message);
         future.addCallback(new ListenableFutureCallback<SendResult<String, EmailMessage>>() {
             @Override
             public void onSuccess(SendResult<String, EmailMessage> result) {
-                System.out.println("Sent message=[" + person + "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                System.out.println("Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]");
             }
 
             @Override
             public void onFailure(Throwable ex) {
-                System.err.println("Unable to send message=[" + person + "] due to : " + ex.getMessage());
+                System.err.println("Unable to send message=[" + message + "] due to : " + ex.getMessage());
             }
         });
     }
