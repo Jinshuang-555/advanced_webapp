@@ -7,10 +7,8 @@ import java.io.IOException;
 
 @Service
 public class EmailService {
-
     @Value("${spring.sendgrid.api.key}")
     private String SENDGRID_API_KEY;
-
     public void send(String email, String link) throws IOException {
         Email from = new Email("niu.jins@northeastern.edu");
         String subject = "Email to verify your account";
