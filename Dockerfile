@@ -10,7 +10,7 @@ COPY target/advanced_webapp-0.0.1-SNAPSHOT.jar /app/
 WORKDIR /app
 
 # Expose port for Spring Boot application
-EXPOSE 8080
+EXPOSE 8081
 
 # Run the Spring Boot application
 CMD ["java", "-jar", "advanced_webapp-0.0.1-SNAPSHOT.jar"]
