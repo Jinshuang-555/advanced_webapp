@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/task")
+@RequestMapping("/v1/app/task")
 @RequiredArgsConstructor
 public class TaskController {
 
