@@ -13,7 +13,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(String userId);
-
+    boolean existsByEmail(String email);
     User findUserByEmail(String email);
     Optional<User> findByEmail(String email);
     void deleteByUserId(String userId);

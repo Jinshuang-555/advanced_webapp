@@ -1,11 +1,14 @@
 package com.example.advanced_webapp.Auth;
 
 import com.example.advanced_webapp.Config.JwtService;
+import com.example.advanced_webapp.Exceptions.EmailExistException;
+import com.example.advanced_webapp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -14,10 +17,16 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) throws IOException {
-        return ResponseEntity.ok(authenticationService.register(registerRequest));
+    public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) throws IOException, EmailExistException {
+        if (!userRepository.existsByEmail(registerRequest.getEmail())) {
+            return ResponseEntity.status(201).body(authenticationService.register(registerRequest));
+        } else {
+            throw new EmailExistException("Email Already Registered");
+        }
+
     }
 
     @PostMapping("/authenticate")
