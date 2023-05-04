@@ -21,6 +21,8 @@ jobs:
         java-version: '17'
     - name: edit application property
       run: echo "spring.sendgrid.api.key=${{ secrets.SENDGRID_KEY }}" >> src/main/resources/application.properties
+           echo "aws.accessKey=${{ secrets.AWS_KEY }}" >> src/main/resources/application.properties
+           echo "aws.secretKey=${{ secrets.AWS_PASSWORD }}" >> src/main/resources/application.properties
     - name: package
       run: |
         pwd
@@ -34,7 +36,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build the Docker image
       run: | 
-        TAG=$(date +%s | tr -d '\n' | tr -d '\r' | tr ':' '_')
+        TAG= curl --silent "https://api.github.com/repos/$1/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")'
         docker build -t db:$TAG .
         docker login
         docker tag db:$TAG jinshuangniu/advanced1cloud1computing:app-$TAG
