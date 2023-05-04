@@ -36,7 +36,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build the Docker image
       run: | 
-        TAG= ${ curl --silent "https://api.github.com/repos/Jinshuang-555/advanced_webapp/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")'}
+        TAG= ${{ curl --silent "https://api.github.com/repos/Jinshuang-555/advanced_webapp/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")'}}
         docker build -t db:$TAG .
         docker login
         docker tag db:$TAG jinshuangniu/advanced1cloud1computing:app-$TAG
