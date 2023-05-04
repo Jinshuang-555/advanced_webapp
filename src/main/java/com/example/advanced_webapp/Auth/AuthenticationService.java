@@ -1,15 +1,20 @@
 package com.example.advanced_webapp.Auth;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
+import com.amazonaws.services.simpleemail.model.*;
 import com.example.advanced_webapp.Auth.VerificationToken.Token;
 import com.example.advanced_webapp.Auth.VerificationToken.TokenRepository;
 import com.example.advanced_webapp.Config.JwtService;
-import com.example.advanced_webapp.Email.EmailService;
-import com.example.advanced_webapp.Kafka.KafkaProducer;
 import com.example.advanced_webapp.Kafka.Message.EmailMessage;
 import com.example.advanced_webapp.Repositories.UserRepository;
 import com.example.advanced_webapp.Tables.Role;
 import com.example.advanced_webapp.Tables.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,17 +25,26 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static io.jsonwebtoken.Claims.SUBJECT;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
+    @Value("${aws.accessKey}")
+    private String awsAccessKey;
+
+    @Value("${aws.secretKey}")
+    private String awsSecretKey;
+
+    @Value("${aws.region}")
+    private String awsRegion;
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final KafkaProducer kafkaProducer;
-    private final EmailService emailService;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) throws IOException {
         var user = User
@@ -52,11 +66,37 @@ public class AuthenticationService {
         );
 
         tokenRepository.save(tokenObject);
-
-        String link = "https://istio.k8s.csye6225jinshuang.me/v1/app/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
+        String link = "https://istio1.k8s.csye6225jinshuang.me/v1/app/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
         EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
-//        kafkaProducer.sendMessage("registration", message);
-        emailService.send(message.getEmail(), message.getLink());
+
+        String FROM = "jin@dev.csye6225jinshuang.me";
+        String TO = registerRequest.getEmail();
+
+        String TEXTBODY = "please verify your account with the following link: " + link;
+
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
+
+        try {
+            AmazonSimpleEmailService client =
+                    AmazonSimpleEmailServiceClientBuilder.standard()
+                            .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                            .withRegion(awsRegion)
+                            .build();
+            SendEmailRequest emailRequest = new SendEmailRequest()
+                    .withDestination(
+                            new Destination().withToAddresses(TO))
+                    .withMessage(new Message()
+                            .withBody(new Body()
+                                    .withText(new Content()
+                                            .withCharset("UTF-8").withData(TEXTBODY)))
+                            .withSubject(new Content()
+                                    .withCharset("UTF-8").withData(SUBJECT)))
+                    .withSource(FROM);
+            client.sendEmail(emailRequest);
+        } catch (Exception ex) {
+            System.out.println("The email was not sent. Error message: "
+                    + ex.getMessage());
+        }
         System.out.println("link: " + link);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse

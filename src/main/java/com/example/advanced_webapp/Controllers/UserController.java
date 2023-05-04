@@ -25,7 +25,12 @@ public class UserController {
     public ResponseEntity<Optional<User>> getUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         String userName = jwtService.extractUsername(token);
-        return ResponseEntity.ok(userRepository.findByEmail(userName));
+        User user = userRepository.findUserByEmail(userName);
+        if (user != null) {
+            return ResponseEntity.ok(userRepository.findByEmail(userName));
+        } else {
+            throw new UsernameNotFoundException("didn't find the user with the username");
+        }
     }
     @DeleteMapping
     @Transactional
