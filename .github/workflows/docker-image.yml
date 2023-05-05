@@ -22,7 +22,7 @@ jobs:
     - name: edit application property
       run: echo "spring.sendgrid.api.key=${{ secrets.SENDGRID_KEY }}" >> src/main/resources/application.properties
            echo "aws.accessKey=${{ secrets.AWS_KEY }}" >> src/main/resources/application.properties
-           echo "aws.secretKey=${{ secrets.AWS_PASSWORD }}" >> src/main/resources/application.properties
+           echo "aws.secretKey=${{ secrets.AWS_SECRETE }}" >> src/main/resources/application.properties
     - name: package
       run: |
         pwd
