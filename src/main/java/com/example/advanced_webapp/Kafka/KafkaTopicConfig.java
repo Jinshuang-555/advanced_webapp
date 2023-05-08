@@ -8,11 +8,6 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
     @Bean
-    public NewTopic userRegistration() {
-        return TopicBuilder.name("registration").build();
-    }
-
-    @Bean
     public NewTopic sqlUpdate() {
         return TopicBuilder.name("sql").build();
     }

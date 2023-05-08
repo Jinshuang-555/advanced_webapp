@@ -2,14 +2,12 @@ package com.example.advanced_webapp.Auth;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.*;
 import com.example.advanced_webapp.Auth.VerificationToken.Token;
 import com.example.advanced_webapp.Auth.VerificationToken.TokenRepository;
 import com.example.advanced_webapp.Config.JwtService;
-import com.example.advanced_webapp.Kafka.Message.EmailMessage;
 import com.example.advanced_webapp.Repositories.UserRepository;
 import com.example.advanced_webapp.Tables.Role;
 import com.example.advanced_webapp.Tables.User;
@@ -67,9 +65,8 @@ public class AuthenticationService {
 
         tokenRepository.save(tokenObject);
         String link = "https://istio1.k8s.csye6225jinshuang.me/v1/app/auth/verify?token=" + token + "&email=" + registerRequest.getEmail();
-        EmailMessage message = new EmailMessage(registerRequest.getEmail(), link);
 
-        String FROM = "jin@dev.csye6225jinshuang.me";
+        String FROM = "jin@prod.csye6225jinshuang.me";
         String TO = registerRequest.getEmail();
 
         String TEXTBODY = "please verify your account with the following link: " + link;
